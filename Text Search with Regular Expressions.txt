@@ -1,0 +1,72 @@
+CIS 283
+
+Text Search Regular Expressions Assignment
+
+ 
+
+To turn in:
+
+    Attach a single .RB file as an attachment to the assignment in Canvas
+
+ 
+
+To do:
+
+Write a program that will search through a data file using regular expressions.
+Your program will ask for which class to search for and it will return the entire line where that class is found.
+You must analyze the data file to determine what regular expressions to look for and how to do this for multiple lines.
+
+YOU MAY NOT MODIFY THE ORIGINAL DATA FILE IN ANY WAY.
+
+ 
+
+For instance, if you ask the user for the Department abbreviation and the class number like:
+
+Enter Department: CIS
+
+Enter Class Number: 282
+
+ 
+
+Your program should print out the line containing “CIS” and “282” as well as the next line following that line like:
+
+ 
+
+2007 CIS   282 AN       HD PROG PRN I   5.0 5.0 Hybrid Class 001 1116 F         ARR   ARR
+
+                                                  Jones D     001 1116 MTWTh     10:30A 11:30A   24     15     9 5.0
+
+ 
+
+ 
+
+The data file is in this folder called Enrollment.txt.
+
+ 
+
+Continue to ask the user for Department and Class numbers, printing out the specified lines,
+until the user enters “EXIT” for the Department name and then quit.
+
+ 
+
+ 
+
+Extra Credit 10 points
+
+ 
+
+Some classes have 3 or more lines following the main line which contains the department and class number,
+so print ALL lines that are associated with that particular class.
+
+ 
+
+For instance, the class CIS 146 would return:
+
+ 
+
+1953 CIS   146 AN       HD INTRO PROG   5.0 5.0 Affholter T 001 1103 MTWTh     10:30A 11:30A   24     23     1 7.7
+
+           Class is closed, but enrollment has dropped below capacity
+
+                                                          Hybrid Class 001 1103 F         ARR   ARR
+														  
