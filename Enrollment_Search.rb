@@ -10,7 +10,7 @@
 
 file_name = "Enrollment.txt"
 $run_program = true
-$debug = true
+$debug = false
 
 # open the Enrollment File
 # check if the file exists
@@ -30,16 +30,20 @@ while $run_program == true
   input_works = false
   while !input_works
     print "Enter Department abbreviation: "
-    department_abbreviation = gets.chomp
+    department_abbreviation = gets.chomp.upcase!
     puts ""
     print "Enter Class Number: "
-    class_number = gets.chomp.to_i
+    class_number = gets.chomp
     puts ""
     # need to add a check for the input
     if (department_abbreviation =~ /\A[A-Z]{2,4}\z/)
-      input_works = true
+      if (class_number =~ /\A\d{2,3}\z/) || (department_abbreviation == "EXIT")
+        input_works = true
+      else
+        puts "Try Again - Class Number is 2 to 3 digits"
+      end
     else
-      puts "Department Abbreviation is All Caps and 2 to 4 letters"
+      puts "Try Again - Department Abbreviation is All Caps and 2 to 4 letters"
     end
   end
   # if the User enter EXIT than close the program
@@ -50,23 +54,32 @@ while $run_program == true
   # ***Search the text for the class***
   # go to the beginning of the file
   enrollment_file.pos = 0
-  class_location_in_file = Array.new
   # go over the whole file
   while !enrollment_file.eof?
     file_line = Array.new
     file_line[0] = enrollment_file.readline
-    file_line_number = enrollment_file.lineno
+    file_pos = Marshal.load(Marshal.dump(enrollment_file.pos))
     # ***Print the findings***
-    if file_line[0] =~ /\s#{department_abbreviation}\s+#{class_number}\s/
-      class_location_in_file.push(file_line_number)
+    scan_line = file_line[0]
+    if scan_line =~ /\s#{department_abbreviation}&{0,1}\s+#{class_number}\s/
       puts file_line[0]
-      enrollment_file.lineno = file_line_number+1
-      file_line[1] = enrollment_file.readline
-      if !(file_line[1] =~ /\s[A-Z]{2,3}\s+\d{2,3}\s/)
-        puts file_line[1]
+      #if !(file_line[1] =~ /\s[A-Z]{2,3}\s+\d{2,3}\s/) # old way it work by looking for a class and if there is a class then it will say do not print
+      find_all_line_flag = true
+      i = 1
+      while find_all_line_flag
+        file_line[i] = enrollment_file.readline
+        puts "file pos #{enrollment_file.pos} is :#{file_line[i]}" if $debug
+        scan_line = file_line[i]
+        puts "/ {10}/ is : #{!(!(scan_line =~ /\A( {11}| {58})\w+/))}" if $debug
+        if (scan_line =~ /\A( {11}| {58})\w+/)
+          puts file_line[i]
+        else
+          find_all_line_flag = false
+        end
+        i = i+1
       end
     end
-    enrollment_file.lineno = file_line_number
+    enrollment_file.pos = file_pos
   end
 # end of Loop and say goodbye
 end
